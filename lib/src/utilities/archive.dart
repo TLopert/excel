@@ -18,8 +18,17 @@ Archive _cloneArchive(
       } else {
         var content = file.content as Uint8List;
         var compress = !_noCompression.contains(file.name);
-        copy = ArchiveFile(file.name, content.length, content)
-          ..compress = compress;
+
+        // Create ArchiveFile with the new API
+        copy = ArchiveFile.noCompress(file.name, content.length, content);
+
+        // Apply compression if needed
+        if (compress) {
+          // Create a compressed version of the file
+          var compressedData = ZLibEncoder().encode(content);
+          copy = ArchiveFile.noCompress(
+              file.name, compressedData.length, compressedData);
+        }
       }
       clone.addFile(copy);
     }

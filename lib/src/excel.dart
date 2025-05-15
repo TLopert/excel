@@ -79,7 +79,8 @@ class Excel {
   }
 
   factory Excel.decodeBuffer(InputStream input) {
-    return _newExcel(ZipDecoder().decodeBuffer(input));
+    final List<int> bytes = input.toUint8List();
+    return _newExcel(ZipDecoder().decodeBytes(bytes));
   }
 
   ///
